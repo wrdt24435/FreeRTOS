@@ -5,6 +5,8 @@
 #include "keyboard_driver.h"
 #include "clk_timer.h"
 #include "gpio.h"
+#include "FreeRTOS.h" 
+#include "task.h"
 
 #if DEBUG
 #define KEY_PRINTF PRINTF
@@ -22,27 +24,6 @@ u8 key_1_press = FIRST_TIME;		//25ÊÇµÚÒ»´Î½øÈë°´×¡×´Ì¬£¬½øÈëºóÃ¿¸ô200ms·¢ËÍ°´×¡×
 u8 key_0_status = 0;	//±æ±ð°´¼ü1°´ÏÂ(bit1)¡¢°´×¡(bit2)
 u8 key_0_count = 0;		//¼ÇÂ¼°´ÏÂ×¡Ô¼1sºó½øÈë°´×¡×´Ì¬
 u8 key_0_press = FIRST_TIME;		//25ÊÇµÚÒ»´Î½øÈë°´×¡×´Ì¬£¬½øÈëºóÃ¿¸ô200ms·¢ËÍ°´×¡×´Ì¬
-/*TICK_TASK key_1_task = {
-	.next = NULL,
-	.task = key1_task,
-	.arg = NULL,
-	.time = 0,
-	.timing = 4,
-	.interval = INTERVAL_10MS,
-	.flag = 0,
-};
-TICK_TASK key_0_task = {
-	.next = NULL,
-	.task = key0_task,
-	.arg = NULL,
-	.time = 0,
-	.timing = 4,
-	.interval = INTERVAL_10MS,
-	.flag = 0,
-};*/
-static TaskHandle_t key_0_Task_Handle = NULL;
-static TaskHandle_t key_1_Task_Handle = NULL;
-
 
 
 void key_init(void)	
@@ -114,19 +95,6 @@ void key0_task(void *arg)
 	vTaskDelay(50);
 }
 
-void keyboard_task()
-{
-	BaseType_t ret;
-	ret = xTaskCreate(key0_task, "key_0", 128, NULL, 7, &key_0_Task_Handle);
-	if (pdPASS != ret) {
-		ERR;
-		return; 
-	}
-	ret = xTaskCreate(key1_task, "key_1", 128, NULL, 7, &key_1_Task_Handle);
-	if (pdPASS != ret) {
-		ERR;
-		return; 
-	}
-}
+
 
 
