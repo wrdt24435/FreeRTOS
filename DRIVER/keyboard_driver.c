@@ -12,16 +12,16 @@
 #define KEY_PRINTF
 #endif
 
-int key0_task(void *arg);
-int key1_task(void *arg);
+#define FIRST_TIME 	20	//25*任务间隔
+#define PRESS_TIME 	4	//4*任务间隔
 
 //可以优化成结构体
 u8 key_1_status = 0;	//辨别按键1按下(bit1)、按住(bit2)
 u8 key_1_count = 0;		//记录按下住约1s后进入按住状态
-u8 key_1_press = 25;		//25是第一次进入按住状态，进入后每隔200ms发送按住状态
+u8 key_1_press = FIRST_TIME;		//25是第一次进入按住状态，进入后每隔200ms发送按住状态
 u8 key_0_status = 0;	//辨别按键1按下(bit1)、按住(bit2)
 u8 key_0_count = 0;		//记录按下住约1s后进入按住状态
-u8 key_0_press = 25;		//25是第一次进入按住状态，进入后每隔200ms发送按住状态
+u8 key_0_press = FIRST_TIME;		//25是第一次进入按住状态，进入后每隔200ms发送按住状态
 /*TICK_TASK key_1_task = {
 	.next = NULL,
 	.task = key1_task,
@@ -40,6 +40,8 @@ TICK_TASK key_0_task = {
 	.interval = INTERVAL_10MS,
 	.flag = 0,
 };*/
+static TaskHandle_t key_0_Task_Handle = NULL;
+static TaskHandle_t key_1_Task_Handle = NULL;
 
 
 
@@ -60,14 +62,14 @@ void key_init(void)
 	io_interrupt_init();
 }
 
-int key1_task(void *arg)
+void key1_task(void *arg)
 {
 	if (io_read(KEY_1)) {
 		if (key_1_status) {
 			KEY_PRINTF("KEY1 UP\r\n");
 			key_1_status = 0;
 			key_1_count = 0;
-			key_1_press = 25;
+			key_1_press = FIRST_TIME;
 		}
 	}
 	else {//if (key_status & 0x01) {
@@ -78,15 +80,15 @@ int key1_task(void *arg)
 		else {
 			if (key_1_count++ > key_1_press) {
 				KEY_PRINTF("KEY1 PRESS ON\r\n");
-				key_1_press = 200 / 40;
+				key_1_press = PRESS_TIME;
 				key_1_count = 0;
 			}
 		}
 	}
-	return 1;
+	vTaskDelay(50);
 }
 
-int key0_task(void *arg)
+void key0_task(void *arg)
 {
 	if (io_read(KEY_0)) {
 		if (key_0_status) {
@@ -109,18 +111,22 @@ int key0_task(void *arg)
 			}
 		}
 	}
-	return 1;
-
+	vTaskDelay(50);
 }
 
-void key_task_init(void)
+void keyboard_task()
 {
-	//insert_task(&key_1_task);
-	//insert_task(&key_0_task);
+	BaseType_t ret;
+	ret = xTaskCreate(key0_task, "key_0", 128, NULL, 7, &key_0_Task_Handle);
+	if (pdPASS != ret) {
+		ERR;
+		return; 
+	}
+	ret = xTaskCreate(key1_task, "key_1", 128, NULL, 7, &key_1_Task_Handle);
+	if (pdPASS != ret) {
+		ERR;
+		return; 
+	}
 }
 
-void key_polling(void)
-{
-
-}
 

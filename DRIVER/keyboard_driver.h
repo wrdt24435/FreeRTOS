@@ -10,7 +10,9 @@ typedef enum {
 }KEYBOARD_EVENT;
 
 void key_init(void);
-void key_task_init(void);
+void key1_task(void *arg);
+void key0_task(void *arg);
+
 
 
 
