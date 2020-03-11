@@ -64,7 +64,7 @@ int flash_service(SERVICE_PACKET *sp)
 	switch(sp->command_id)
 	{
 		case PERIPHERAL_FLASH_WRITE:
-			W25QXX_Write(flash_sp->buf, flash_sp->addr, flash_sp->len);
+			Flash_Write(flash_sp->buf, flash_sp->addr, flash_sp->len);
 			break;
 		case PERIPHERAL_FLASH_READ:
 			W25QXX_Read(flash_sp->buf, flash_sp->addr, flash_sp->len);

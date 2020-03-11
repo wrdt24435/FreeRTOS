@@ -503,11 +503,6 @@
               <FilePath>..\HARDWARE\gpio.c</FilePath>
             </File>
             <File>
-              <FileName>head.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\head.c</FilePath>
-            </File>
-            <File>
               <FileName>rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\rtc.c</FilePath>
@@ -542,6 +537,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\cti2c.c</FilePath>
             </File>
+            <File>
+              <FileName>heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\heap.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -551,11 +551,6 @@
               <FileName>keyboard_driver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\DRIVER\keyboard_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>led_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DRIVER\led_driver.c</FilePath>
             </File>
             <File>
               <FileName>mon.c</FileName>
@@ -608,21 +603,6 @@
           <GroupName>SERVICE</GroupName>
           <Files>
             <File>
-              <FileName>flash_service_if.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SERVICE\flash_service_if.c</FilePath>
-            </File>
-            <File>
-              <FileName>LED_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SERVICE\LED_service.c</FilePath>
-            </File>
-            <File>
-              <FileName>rtc_service_if.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SERVICE\rtc_service_if.c</FilePath>
-            </File>
-            <File>
               <FileName>service.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SERVICE\service.c</FilePath>
@@ -636,6 +616,26 @@
               <FileName>rtc_service.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\DRIVER\rtc_service.c</FilePath>
+            </File>
+            <File>
+              <FileName>LED_package.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SERVICE\LED_package.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_package.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SERVICE\flash_package.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc_package.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SERVICE\rtc_package.c</FilePath>
+            </File>
+            <File>
+              <FileName>LED_service.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DRIVER\LED_service.c</FilePath>
             </File>
           </Files>
         </Group>

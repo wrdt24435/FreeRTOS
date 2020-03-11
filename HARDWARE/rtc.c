@@ -78,7 +78,7 @@ u8 rtc_init(void)
 		while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET)	//检查指定的RCC标志位设置与否,等待低速晶振就绪
 		{
 			retry++;
-			delay_ms(10);
+			delay_us(10);
 		}
 		if(retry==0)return 1;		//LSE 开启失败. 
 			

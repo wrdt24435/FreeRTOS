@@ -5,10 +5,10 @@
 
 static TaskHandle_t AppTaskCreate_Handle = NULL;
 
-static void AppTaskCreate(void)
+static void AppTaskCreate(void *arg)
 {
 	taskENTER_CRITICAL();
-	LED_test_task()
+	LED_test_task();
 	vTaskDelete(AppTaskCreate_Handle); //删除AppTaskCreate任务
 	taskEXIT_CRITICAL(); //退出临界区
 }
@@ -27,14 +27,13 @@ void BSP_Init(void)
 	RNG_Init();
 	W25QXX_Init();
 }
-vTaskStartScheduler(
 
 int main(void)
 { 
 	BSP_Init();		        //初始化LED端口
 	View_init();
 	LCD_ShowString(30,40,210,24,24,"Hello my STM pennel!");
-	PRINTF("TICK_TASK size %d\r\n", sizeof(TICK_TASK));
+	PRINTF("RTOS \r\n");
 
 	BaseType_t ret;
 	ret = xTaskCreate(AppTaskCreate, "tc", 128*4, NULL, 2, &AppTaskCreate_Handle);

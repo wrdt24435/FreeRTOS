@@ -10,7 +10,6 @@ int Heap_state(int argc, char **argv);
 int send_touch(int argc, char **argv);
 mon_list command_list[] = {
 	{Mon_hello, "hello"},
-	{timer_test, "timer"},
 	{Heap_state, "memory"},
 	{send_touch, "touch"},
 	{NULL,NULL}
@@ -50,24 +49,6 @@ int send_touch(int argc, char **argv)
 {
 	if (argc == 2) {
 		Send_message(TOUCH_MSG , to_int(argv[0]), 0);
-	}
-	else {
-		ERR;
-	}
-	return 0;
-}
-
-int timer_test_func(void *arg)
-{
-	PRINTF("end: %d\r\n", check_tick());
-	return 0;
-}
-
-int timer_test(int argc, char **argv)
-{
-	if (argc == 2) {
-		PRINTF("start: %d\r\n", check_tick());
-		Create_task(timer_test_func, NULL, to_int(argv[0]), to_int(argv[1]), 0);
 	}
 	else {
 		ERR;

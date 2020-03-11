@@ -11,17 +11,16 @@
 #define SER_PRINTF
 #endif
 
-service service_core[TYPE_MAX] = {
+int led_service(SERVICE_PACKET *sp);
+int rtc_service(SERVICE_PACKET *sp);
+int flash_service(SERVICE_PACKET *sp);
+service service_core[TYPE_MAX + 1] = {
 	led_service,
 	rtc_service,
 	flash_service,
 	NULL,
 };
 
-
-int led_service(SERVICE_PACKET *sp);
-int rtc_service(SERVICE_PACKET *sp);
-int flash_service(SERVICE_PACKET *sp);
 
 void Service_init(void)
 {

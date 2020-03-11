@@ -49,9 +49,9 @@ void LED_test(void)
 {
 	LED_switch(LED_0, 1);
 	LED_switch(LED_1, 0);
-	delay_ms(500);			   
+	//delay_ms(500);			   
 	LED_switch(LED_1, 1);
 	LED_switch(LED_0, 0);
-	delay_ms(500);					 
+	//delay_ms(500);					 
 }
 

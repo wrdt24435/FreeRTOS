@@ -1,7 +1,8 @@
 #include "common.h" 
 #include "LED_package.h" 
 #include "LED_service.h" 
-#include "task.h" 
+#include "FreeRTOS.h" 
+#include "task.h"
 
 static TaskHandle_t LED0_Task_Handle = NULL;
 static TaskHandle_t LED1_Task_Handle = NULL;
@@ -51,12 +52,12 @@ void LED_test_task()
 	ret = xTaskCreate(LED_0_Task, "led0", 128*4, NULL, 2, &LED0_Task_Handle);
 	if (pdPASS != ret) {
 		ERR;
-		return -1; 
+		return; 
 	}
 	ret = xTaskCreate(LED_1_Task, "led1", 128*4, NULL, 2, &LED1_Task_Handle);
 	if (pdPASS != ret) {
 		ERR;
-		return -1; 
+		return; 
 	}
 }
 

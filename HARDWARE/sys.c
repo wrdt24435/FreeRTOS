@@ -60,7 +60,6 @@ void MYDMA_Enable(DMA_Stream_TypeDef *DMA_Streamx,u16 ndtr)
 	DMA_SetCurrDataCounter(DMA_Streamx,ndtr);          //数据传输量  
 	DMA_Cmd(DMA_Streamx, ENABLE);                      //开启DMA传输 
 
-	u32 time = check_tick();
     while(1)
     {
 		if(DMA_GetFlagStatus(DMA2_Stream7,DMA_FLAG_TCIF7)!=RESET)//等待DMA2_Steam7传输完成
@@ -69,8 +68,6 @@ void MYDMA_Enable(DMA_Stream_TypeDef *DMA_Streamx,u16 ndtr)
 			break; 
         }
     }
-	//delay_ms(900);
-	SYS_PRINTF("DMA Done! S:%d  E:%d\n",time, check_tick());
 }	  
 
 /*const char wakeup[] = "So wake me up when it's all over, When I'm wiser and I'm older. All this time I was finding myself and I didn't kown I was lost.";
@@ -103,7 +100,7 @@ u8 RNG_Init(void)
 	while(RNG_GetFlagStatus(RNG_FLAG_DRDY)==RESET&&retry<10000)	//等待随机数就绪
 	{
 		retry++;
-		delay_ms(100);
+		delay_us(100);
 	}
 	if(retry>=10000) {
 		ERR;

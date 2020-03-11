@@ -71,18 +71,17 @@ void my_heap_init()
 	int n = 0;
 	void *temp;
 	
-	u32 uxAddress = (u32)sector_addr[0]->start;
-
+	/*u32 uxAddress = (u32)sector_addr[0]->start;
 	if((uxAddress & (ALIGN - 1)) != 0)	{	//四字节对齐
 		uxAddress += (ALIGN - 1);
 		uxAddress &= ~((u32)(ALIGN - 1));
-		sector_addr[0]->start = sector_addr[0]->free = uxAddress;
+		sector_addr[0]->start = sector_addr[0]->free = (void *)uxAddress;
 		sector_addr[0]->total_num -= 1;
 		sector_addr[0]->free_num -= 1;
 		sector_addr[0]->mini -= 1;
-	}
+	}*/
 	for (i = 0; i < (ARR_NUM(sector_addr) - 1); i++) {	//sector_addr成员末尾是NULL，所以要-1
-		sector_addr[i]->free = sector_addr[i]->start &= ~((u32)(ALIGN - 1));	//对齐
+		//sector_addr[i]->free = sector_addr[i]->start &= ~((u32)(ALIGN - 1));	//对齐
 		temp = sector_addr[i]->start;
 		max = sector_addr[i]->total_num * sector_addr[i]->block_size;
 		while (n < max) {

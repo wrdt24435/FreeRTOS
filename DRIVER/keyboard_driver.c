@@ -22,7 +22,7 @@ u8 key_1_press = 25;		//25是第一次进入按住状态，进入后每隔200ms发送按住状态
 u8 key_0_status = 0;	//辨别按键1按下(bit1)、按住(bit2)
 u8 key_0_count = 0;		//记录按下住约1s后进入按住状态
 u8 key_0_press = 25;		//25是第一次进入按住状态，进入后每隔200ms发送按住状态
-TICK_TASK key_1_task = {
+/*TICK_TASK key_1_task = {
 	.next = NULL,
 	.task = key1_task,
 	.arg = NULL,
@@ -39,7 +39,7 @@ TICK_TASK key_0_task = {
 	.timing = 4,
 	.interval = INTERVAL_10MS,
 	.flag = 0,
-};
+};*/
 
 
 
@@ -115,8 +115,8 @@ int key0_task(void *arg)
 
 void key_task_init(void)
 {
-	insert_task(&key_1_task);
-	insert_task(&key_0_task);
+	//insert_task(&key_1_task);
+	//insert_task(&key_0_task);
 }
 
 void key_polling(void)

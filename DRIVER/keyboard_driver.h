@@ -11,7 +11,7 @@ typedef enum {
 
 void key_init(void);
 void key_task_init(void);
-void insert_task(TICK_TASK *task);
+
 
 
 #endif

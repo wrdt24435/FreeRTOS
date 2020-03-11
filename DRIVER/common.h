@@ -55,9 +55,7 @@ typedef unsigned char  	u8;
 #define _CLR_BIT(x,y) (x &= (~y))) //«Â¡„
 #define _CHECK_BIT(x,y) (x & y) //ºÏ≤‚
 
-
-
-#include "clk_timer.h"
+void delay_us(u32 count);
 #include "heap.h"
 
 #endif

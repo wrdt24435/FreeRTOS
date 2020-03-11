@@ -9,7 +9,6 @@
 #include "common.h"	
 #include "diskio.h"		/* FatFs lower layer API */
 #include "sdio_sdcard.h"
-#include "w25q16.h"
 #include "heap.h"		
 
 #define SD_CARD	 0  //SD卡,卷标为0
@@ -120,7 +119,7 @@ DRESULT disk_write (
 		case EX_FLASH://外部flash
 			for(;count>0;count--)
 			{										    
-				W25QXX_Write((u8*)buff,sector*FLASH_SECTOR_SIZE,FLASH_SECTOR_SIZE);
+				Flash_Write((u8*)buff,sector*FLASH_SECTOR_SIZE,FLASH_SECTOR_SIZE);
 				sector++;
 				buff+=FLASH_SECTOR_SIZE;
 			}
