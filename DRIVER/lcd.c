@@ -261,9 +261,9 @@ void LCD_Set_Window(u16 sx,u16 sy,u16 width,u16 height)
 
 void lcd_soft_init()
 {
-	delay_us(40000); // delay 50 ms 
+	delay_us(10000); // delay 50 ms 
  	LCD_WriteReg(0x0000,0x0001);
-	delay_us(40000); // delay 50 ms 
+	delay_us(10000); // delay 50 ms 
   	lcddev.id = LCD_ReadReg(0x0000);   	
 	if(lcddev.id<0XFF||lcddev.id==0XFFFF||lcddev.id==0X9300)//读到ID不正确,新增lcddev.id==0X9300判断，因为9341在未被复位的情况下会被读成9300
 	{	

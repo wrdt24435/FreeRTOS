@@ -16,7 +16,6 @@ static TaskHandle_t key_1_Task_Handle = NULL;
 void LED_test_task()
 {
 	BaseType_t ret;
-	taskENTER_CRITICAL(); //进入临界区
 	ret = xTaskCreate(LED_0_Task, "led0", 128, NULL, 2, &LED0_Task_Handle);
 	if (pdPASS != ret) {
 		ERR;

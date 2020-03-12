@@ -109,7 +109,6 @@ void SysTick_init(void)
 	}
 }
 
-
 void delay_us(u32 count)
 {
 	count *= 0xFF;

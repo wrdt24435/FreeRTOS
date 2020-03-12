@@ -10,18 +10,19 @@ static void AppTaskCreate(void *arg)
 {
 	taskENTER_CRITICAL();
 	LED_test_task();
+	keyboard_task();
 	vTaskDelete(AppTaskCreate_Handle); //删除AppTaskCreate任务
 	taskEXIT_CRITICAL(); //退出临界区
 }
 
 void BSP_Init(void)
 { 
-	HSE_SetSysClock(8, 336, 2, 7);			
-	SysTick_init();
+	//HSE_SetSysClock(8, 336, 2, 7);			
+	//SysTick_init();
 	Debug_USART_Config();
 	LED_Init();
 	key_init();
-	my_heap_init();
+	//my_heap_init();
 	LCD_Init();
 	rtc_init();
 	//WWDG_Init();

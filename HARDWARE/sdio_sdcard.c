@@ -1704,9 +1704,9 @@ void sd_cart_test()
 	while(SD_Init())//ºÏ≤‚≤ªµΩSDø®
 	{
 		LCD_ShowString(30,150,200,16,16,"SD Card Error!");
-		delay_ms(100);					
+		delay_us(10000);					
 		LCD_ShowString(30,150,200,16,16,"Please Check! ");
-		delay_ms(100);
+		delay_us(10000);
 		//LED0=!LED0;//DS0…¡À∏
 	}
 	LCD_ShowString(30,150,200,16,16,"Checked cart OK!");
