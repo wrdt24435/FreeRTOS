@@ -1,5 +1,5 @@
 #include "common.h"
-#include "LED_service.h"
+#include "LED_driver.h"
 #include "gpio.h"
 
 #define LED0(x)	io_set_out(LED_0, x)
@@ -25,7 +25,7 @@ int led_service(SERVICE_PACKET *sp)
 	switch(sp->command_id)
 	{
 		case LEDXXX:
-			LED_switch(led_sp->type, led_sp->state);
+			LED_switch(led_sp->type, led_sp->type);
 			break;
 		default :
 			break;
@@ -43,7 +43,6 @@ void LED_Init(void)
 	gpio_config->sys.GPIO_PuPd = GPIO_PuPd_UP; 
 	gpio_config->sys.GPIO_Speed = GPIO_Speed_2MHz; 
 	gpio_init(gpio_config);	
-	
 }
 
 void LED_test(void)

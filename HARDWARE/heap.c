@@ -2,6 +2,25 @@
 #include <string.h>
 #include "heap.h"
 
+#define BYTE_20_NUM	5
+#define BYTE_40_NUM	5
+#define BYTE_128_NUM 5
+#define BYTE_512_NUM 4
+
+#define BYTE_20_SIZE	(20 * BYTE_20_NUM)
+#define BYTE_40_SIZE	(40 * BYTE_40_NUM)
+#define BYTE_128_SIZE	(128 * BYTE_128_NUM)
+#define BYTE_512_SIZE	(512 * BYTE_512_NUM)
+#define HEAP_SIZE	(BYTE_20_SIZE + BYTE_40_SIZE + BYTE_128_SIZE + BYTE_512_SIZE)
+
+typedef struct {
+	void *start;
+	void *free;
+	u16 free_num;
+	u16 total_num;
+	u8 block_size;
+}DYNAMIC_MEMORY;
+
 #if DEBUG
 #define HEAP_PRINTF PRINTF
 #else
@@ -64,7 +83,7 @@ HEAP BYTE_512 = {
 HEAP *sector_addr[] = {&BYTE_20, &BYTE_40, &BYTE_128, &BYTE_512, NULL};
 
 
-void my_heap_init()
+void My_heap_init()
 {
 	int i;
 	int max;
@@ -93,7 +112,7 @@ void my_heap_init()
 	}
 }
 
-void *my_malloc(int size)
+void *My_malloc(int size)
 {
 	int i = 0;
 	void *temp;
@@ -117,7 +136,7 @@ void *my_malloc(int size)
 	return temp;
 }
 
-void my_free(void *addr)
+void My_free(void *addr)
 {
 	int i = 1;
 	void *temp;

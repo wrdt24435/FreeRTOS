@@ -1,6 +1,11 @@
 #include "gpio.h"
 #include "spi.h"
 
+const SPI_TypeDef *spi_port[] = {
+	0,
+	SPI1,
+}
+
 //以下是SPI模块的初始化代码，配置成主机模式 						  
 //SPI口初始化
 //这里针是对SPI1的初始化
@@ -36,24 +41,24 @@ void flash_spi_init(void)
 	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;		//定义波特率预分频的值:波特率预分频值为256
 	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
 	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
-	SPI_Init(W25Q16_SPI, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
+	SPI_Init(spi_port[W25Q16_SPI], &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
 
-	SPI_Cmd(W25Q16_SPI, ENABLE); //使能SPI外设
+	SPI_Cmd(spi_port[W25Q16_SPI], ENABLE); //使能SPI外设
 
-	SPI1_ReadWriteByte(0xff);//启动传输		 
-	SPI_Cmd(W25Q16_SPI,ENABLE); //使能SPI1
+	SPI_ReadWriteByte(W25Q16_SPI, 0xff);//启动传输		 
+	SPI_Cmd(spi_port[W25Q16_SPI],ENABLE); //使能SPI1 
 } 
 
-//SPI1 读写一个字节
+//SPI 读写一个字节
 //TxData:要写入的字节
 //返回值:读取到的字节
-u8 SPI1_ReadWriteByte(u8 TxData)
+u8 SPI_ReadWriteByte(u32 port, u8 TxData)
 {		 			 
  
-	while (SPI_I2S_GetFlagStatus(W25Q16_SPI, SPI_I2S_FLAG_TXE) == RESET){}//等待发送区空  
-	SPI_I2S_SendData(W25Q16_SPI, TxData); //通过外设SPIx发送一个byte  数据	
-	while (SPI_I2S_GetFlagStatus(W25Q16_SPI, SPI_I2S_FLAG_RXNE) == RESET); //等待接收完一个byte  
-	return SPI_I2S_ReceiveData(W25Q16_SPI); //返回通过SPIx最近接收的数据	
+	while (SPI_I2S_GetFlagStatus(spi_port[port], SPI_I2S_FLAG_TXE) == RESET){}//等待发送区空  
+	SPI_I2S_SendData(spi_port[port], TxData); //通过外设SPIx发送一个byte  数据	
+	while (SPI_I2S_GetFlagStatus(spi_port[port], SPI_I2S_FLAG_RXNE) == RESET); //等待接收完一个byte  
+	return SPI_I2S_ReceiveData(spi_port[port]); //返回通过SPIx最近接收的数据	
  		    
 }
 

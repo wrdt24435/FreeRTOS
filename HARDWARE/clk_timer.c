@@ -1,5 +1,3 @@
-//备注：10ms和100ms定时存在误差，与polling是否及时处理相关
-//MS任务在tick定时器里插入，更精确
 #include "common.h"
 #include <string.h>
 #include "clk_timer.h"
@@ -115,12 +113,6 @@ void delay_us(u32 count)
 	while (count--);
 }
 
-extern void Mon_polling(void);
-
-void polling(void)
-{
-
-}
 
 
 

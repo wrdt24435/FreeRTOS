@@ -2,6 +2,7 @@
 #define __COMMON_H 		
 
 #include <stdio.h>
+#include "heap.h"
 
 #define DEBUG 1
 #define PRINTF	printf
@@ -56,7 +57,6 @@ typedef unsigned char  	u8;
 #define _CHECK_BIT(x,y) (x & y) //¼ì²â
 
 void delay_us(u32 count);
-#include "heap.h"
 
 #endif
 

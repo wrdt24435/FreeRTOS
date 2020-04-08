@@ -68,7 +68,7 @@ void set_time(TIMETYPEDEF *time)
 u8 rtc_init(void)
 {
 	RTC_InitTypeDef RTC_InitStructure;
-	u16 retry=0X1FFF; 
+	//u16 retry=0X1FFF; 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);//使能PWR时钟
 	PWR_BackupAccessCmd(ENABLE);	//使能后备寄存器访问 
 	
@@ -77,10 +77,10 @@ u8 rtc_init(void)
 		RCC_LSEConfig(RCC_LSE_ON);//LSE 开启    
 		while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET)	//检查指定的RCC标志位设置与否,等待低速晶振就绪
 		{
-			retry++;
+		//	retry++;
 			delay_us(10);
 		}
-		if(retry==0)return 1;		//LSE 开启失败. 
+		//if(retry==0)return 1;		//LSE 开启失败. 
 			
 		RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);		//设置RTC时钟(RTCCLK),选择LSE作为RTC时钟    
 		RCC_RTCCLKCmd(ENABLE);	//使能RTC时钟 

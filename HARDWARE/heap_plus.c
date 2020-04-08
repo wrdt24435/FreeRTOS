@@ -12,7 +12,7 @@
 #define portBYTE_ALIGNMENT			4
 #define portBYTE_ALIGNMENT_MASK	( portBYTE_ALIGNMENT - 1 )
 #define xHeapStructSize		sizeof( BlockLink_t )
-#define xBlockAllocatedBit  (1 << 31)	//å·²ä½¿ç”¨çš„å†…å­˜å—æœ€é«˜ä½ç½®1
+#define xBlockAllocatedBit  (1 << 31)	//ÒÑÊ¹ÓÃµÄÄÚ´æ¿é×î¸ßÎ»ÖÃ1
 
 #include <time.h>
 void delay(int seconds)
@@ -26,14 +26,14 @@ void delay(int seconds)
 typedef struct A_BLOCK_LINK
 {
 	struct A_BLOCK_LINK *pxNextFreeBlock;	/*<< The next free block in the list. */
-	unsigned int xBlockSize;	//å†…å­˜å—å¤§å°ï¼Œæœ€é«˜ä½ç”¨æ¥æ£€æµ‹æ˜¯å¦è¢«ä½¿ç”¨
+	unsigned int xBlockSize;	//ÄÚ´æ¿é´óÐ¡£¬×î¸ßÎ»ÓÃÀ´¼ì²âÊÇ·ñ±»Ê¹ÓÃ
 } BlockLink_t;
 static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert );
 
 
 static unsigned char Heap[HEAP_SIZE];
-static BlockLink_t xStart;	//å¯ç”¨å†…å­˜å—é“¾è¡¨å¤´
-static BlockLink_t	*pxEnd = NULL;	//ç”¨æ¥æŒ‡å‘å†…å­˜å—Heap[]å°¾éƒ¨ï¼Œä½¿ç”³è¯·å’Œé‡Šæ”¾æ›´å¿«ä¸€ç‚¹ï¼Œä»£ç é‡æ›´å°‘ä¸€ç‚¹
+static BlockLink_t xStart;	//¿ÉÓÃÄÚ´æ¿éÁ´±íÍ·
+static BlockLink_t	*pxEnd = NULL;	//ÓÃÀ´Ö¸ÏòÄÚ´æ¿éHeap[]Î²²¿£¬Ê¹ÉêÇëºÍÊÍ·Å¸ü¿ìÒ»µã£¬´úÂëÁ¿¸üÉÙÒ»µã
 static size_t xFreeBytesRemaining = 0U;
 static size_t xMinimumEverFreeBytesRemaining = 0U;
 
@@ -43,10 +43,10 @@ void *My_malloc( size_t xWantedSize )
 	BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
 	void *pvReturn = NULL;
 
-	if( ( xWantedSize & xBlockAllocatedBit ) == 0 )	//æœ€é«˜ä½ç”¨æ¥åˆ¤æ–­
+	if( ( xWantedSize & xBlockAllocatedBit ) == 0 )	//×î¸ßÎ»ÓÃÀ´ÅÐ¶Ï
 	{
 		xWantedSize += xHeapStructSize;
-		//è®©ç”³è¯·å¤§å°ä¸Žå†…å­˜å¯¹é½
+		//ÈÃÉêÇë´óÐ¡ÓëÄÚ´æ¶ÔÆë
 		if( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) != 0x00 )
 		{
 			xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK ) );
@@ -54,9 +54,9 @@ void *My_malloc( size_t xWantedSize )
 
 		if ( xWantedSize <= xFreeBytesRemaining )
 		{
-			pxPreviousBlock = &xStart;	//å¯ç”¨å†…å­˜å—ä¸Šä¸€ä¸ªèŠ‚ç‚¹ï¼Œç”¨æ¥æŒ‡å‘å¯ç”¨å†…å­˜å—ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
-			pxBlock = xStart.pxNextFreeBlock;	//ç”¨æ¥æ‰¾åˆ°å¯ç”¨å†…å­˜å—
-			// æ‰¾åˆ°ç¬¦åˆå¤§å°çš„å†…å­˜å—
+			pxPreviousBlock = &xStart;	//¿ÉÓÃÄÚ´æ¿éÉÏÒ»¸ö½Úµã£¬ÓÃÀ´Ö¸Ïò¿ÉÓÃÄÚ´æ¿éÏÂÒ»¸ö½Úµã
+			pxBlock = xStart.pxNextFreeBlock;	//ÓÃÀ´ÕÒµ½¿ÉÓÃÄÚ´æ¿é
+			// ÕÒµ½·ûºÏ´óÐ¡µÄÄÚ´æ¿é
 			while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL ) )
 			{
 				pxPreviousBlock = pxBlock;
@@ -68,7 +68,7 @@ void *My_malloc( size_t xWantedSize )
 				pvReturn = (void *)(((unsigned char *)pxPreviousBlock->pxNextFreeBlock) + xHeapStructSize);
 				pxPreviousBlock->pxNextFreeBlock = pxBlock->pxNextFreeBlock;
 
-				//å¦‚æžœè¯¥å†…å­˜å—å‰©ä¸‹çš„å¤§å°å¤Ÿå¤§ï¼Œå°±æŠŠå‰©ä¸‹çš„åˆ†æˆä¸€ä¸ªå¯ç”¨å†…å­˜å—ï¼Œå¦åˆ™è¯¥å†…å­˜å—å…¨éƒ¨æ‹¿åŽ»ä½¿ç”¨
+				//Èç¹û¸ÃÄÚ´æ¿éÊ£ÏÂµÄ´óÐ¡¹»´ó£¬¾Í°ÑÊ£ÏÂµÄ·Ö³ÉÒ»¸ö¿ÉÓÃÄÚ´æ¿é£¬·ñÔò¸ÃÄÚ´æ¿éÈ«²¿ÄÃÈ¥Ê¹ÓÃ
 				if( ( pxBlock->xBlockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
 				{
 
@@ -133,13 +133,13 @@ void My_free( void *pv )
 	}
 }
 
-static void HeapInit( void )
+static void My_heap_init( void )
 {
 	BlockLink_t *pxFirstFreeBlock;
 	unsigned char *pucAlignedHeap;
 	size_t uxAddress = ( size_t ) Heap;
 	size_t xTotalHeapSize = HEAP_SIZE;
-	//å†…å­˜heap[]å¯¹é½ï¼Œå¯¹é½åŽå¯ç”¨xTotalHeapSizeå‡å°‘
+	//ÄÚ´æheap[]¶ÔÆë£¬¶ÔÆëºó¿ÉÓÃxTotalHeapSize¼õÉÙ
 	if( ( uxAddress & portBYTE_ALIGNMENT_MASK ) != 0 )
 	{
 		PRINTF("align!\r\n");
@@ -148,13 +148,13 @@ static void HeapInit( void )
 		xTotalHeapSize -= portBYTE_ALIGNMENT;
 	}
 
-	pucAlignedHeap = ( unsigned char * ) uxAddress;	//heapå¤´
+	pucAlignedHeap = ( unsigned char * ) uxAddress;	//heapÍ·
 
 	xStart.pxNextFreeBlock = ( void * ) pucAlignedHeap;
 	xStart.xBlockSize = ( size_t ) 0;
 
 	uxAddress = ( ( size_t ) pucAlignedHeap ) + xTotalHeapSize;
-	uxAddress -= xHeapStructSize;	//æœ€åŽå†…å­˜ç©ºé—´æ˜¯pxEndç»“æž„ä½“
+	uxAddress -= xHeapStructSize;	//×îºóÄÚ´æ¿Õ¼äÊÇpxEnd½á¹¹Ìå
 	uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
 	pxEnd = ( void * ) uxAddress;
 	pxEnd->xBlockSize = 0;
@@ -168,16 +168,16 @@ static void HeapInit( void )
 	xFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
 }
 
-//ä¼ å¯ç”¨å†…å­˜å—ï¼Œç„¶åŽè°ƒæ•´å¯ç”¨å†…å­˜å—é“¾è¡¨
+//´«¿ÉÓÃÄÚ´æ¿é£¬È»ºóµ÷Õû¿ÉÓÃÄÚ´æ¿éÁ´±í
 static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert )
 {
 	BlockLink_t *pxIterator;
 	unsigned char *puc;
 
-	//æ‰¾åˆ°è¿˜çš„å†…å­˜å—åœ¨heap[]å†…å­˜å—çš„ä½ç½®ï¼Œæ‰¾åˆ°åŽåœ¨pxIterator->pxNextFreeBlockä¸Šé¢
+	//ÕÒµ½»¹µÄÄÚ´æ¿éÔÚheap[]ÄÚ´æ¿éµÄÎ»ÖÃ£¬ÕÒµ½ºóÔÚpxIterator->pxNextFreeBlockÉÏÃæ
 	for( pxIterator = &xStart; pxIterator->pxNextFreeBlock < pxBlockToInsert;pxIterator = pxIterator->pxNextFreeBlock);
 
-	//æ£€æŸ¥å½’è¿˜çš„å†…å­˜å—ä¸Žä¸Šä¸€ä¸ªå¯ç”¨å†…å­˜å—æ˜¯å¦éœ€è¦åˆå¹¶
+	//¼ì²é¹é»¹µÄÄÚ´æ¿éÓëÉÏÒ»¸ö¿ÉÓÃÄÚ´æ¿éÊÇ·ñÐèÒªºÏ²¢
 	puc = ( unsigned char * ) pxIterator;
 	if((puc + pxIterator->xBlockSize) == (unsigned char *) pxBlockToInsert)
 	{
@@ -185,7 +185,7 @@ static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert )
 		pxBlockToInsert = pxIterator;
 	}
 
-	//æ£€æŸ¥å½’è¿˜çš„å†…å­˜å—ä¸Žä¸‹ä¸€ä¸ªå¯ç”¨å†…å­˜å—æ˜¯å¦éœ€è¦åˆå¹¶
+	//¼ì²é¹é»¹µÄÄÚ´æ¿éÓëÏÂÒ»¸ö¿ÉÓÃÄÚ´æ¿éÊÇ·ñÐèÒªºÏ²¢
 	puc = ( unsigned char * ) pxBlockToInsert;
 	if( ( puc + pxBlockToInsert->xBlockSize ) == ( unsigned char * ) pxIterator->pxNextFreeBlock )
 	{
@@ -205,20 +205,20 @@ static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert )
 		pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock;
 	}
 
-	//å¦‚æžœå’Œä¸Šä¸€ä¸ªå¯ç”¨å†…å­˜åˆå¹¶äº†ï¼Œåˆ™ä¸ç”¨æ›´æ–°ï¼Œå¦åˆ™ä¸Šä¸€ä¸ªå¯ç”¨å†…å­˜æŒ‡å‘è¿˜çš„å†…å­˜å—
+	//Èç¹ûºÍÉÏÒ»¸ö¿ÉÓÃÄÚ´æºÏ²¢ÁË£¬Ôò²»ÓÃ¸üÐÂ£¬·ñÔòÉÏÒ»¸ö¿ÉÓÃÄÚ´æÖ¸Ïò»¹µÄÄÚ´æ¿é
 	if( pxIterator != pxBlockToInsert )
 	{
 		pxIterator->pxNextFreeBlock = pxBlockToInsert;
 	}
 }
 
-
+/*
 int main() 
 {
 	int n = 0;
 	HeapInit();
 	PRINTF("free num %d\r\n", xFreeBytesRemaining);
-	PRINTF("Heao S: %x  xS.next:%x  end:%x\r\n", Heap, xStart.pxNextFreeBlock, pxEnd);
+	PRINTF("Heap S: %x  xS.next:%x  end:%x\r\n", Heap, xStart.pxNextFreeBlock, pxEnd);
 	
 	char *a = My_malloc(128);
 	char *b = My_malloc(40);
@@ -257,6 +257,6 @@ int main()
 		n +=4;
 	}
 	return 0;
-}
+}*/
 
 

@@ -35,13 +35,13 @@ extern u16 W25QXX_TYPE;					//定义W25QXX芯片型号
 #define W25X_JedecDeviceID		0x9F 
 
 void W25QXX_Init(void);
-u16  W25QXX_ReadID(void);  	    		//读取FLASH ID
-u8	 W25QXX_ReadSR(void);        		//读取状态寄存器 
+u16  Flash_readID(void);  	    		//读取FLASH ID
+u8	 Flash_readSR(void);        		//读取状态寄存器 
 void W25QXX_Write_SR(u8 sr);  			//写状态寄存器
 void W25QXX_Write_Enable(void);  		//写使能 
 void W25QXX_Write_Disable(void);		//写保护
 void W25QXX_Write_NoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
-void W25QXX_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);   //读取flash
+void Flash_read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);   //读取flash
 void W25QXX_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);//写入flash
 void W25QXX_Erase_Chip(void);    	  	//整片擦除
 void W25QXX_Erase_Sector(u32 Dst_Addr);	//扇区擦除

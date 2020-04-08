@@ -1,6 +1,6 @@
-/*	系统层次: IC外设HARDWARE，外设功能driver: 机器功能:service
+/*	系统层次: IC外设HARDWARE，外设功能driver: 机器功能:service(STM小板基本没有)
 *	除了HARDWARE其他做到移植不用改动，service分开if(interface)是为了
-*	区分接口和机器功能执行过程，方便修改。
+*	区分调用接口和机器功能执行过程，方便修改。
 */
 #include "common.h" 
 #include "Service.h" 
@@ -11,16 +11,18 @@
 #define SER_PRINTF
 #endif
 
+service service_core[TYPE_MAX];
+
+
 int led_service(SERVICE_PACKET *sp);
 int rtc_service(SERVICE_PACKET *sp);
 int flash_service(SERVICE_PACKET *sp);
-service service_core[TYPE_MAX + 1] = {
-	led_service,
-	rtc_service,
-	flash_service,
+service service_core[TYPE_MAX + 1] = {	//修改时要和TYPE_MAX对应
+	//led_service,
+	//rtc_service,
+	//flash_service,
 	NULL,
 };
-
 
 void Service_init(void)
 {

@@ -146,12 +146,14 @@ void command_handler(u8 *buf)
 	}
 }
 
-void Mon_polling(void)
+void Mon_task(void)
 {
-	if (mon_flag_rw(0)) {
-		u8 *buf = get_mon_buf();
-		mon_flag_rw(1);
-		command_handler(buf);
-		reset_mon_buf();
+	while (1) {
+		//if (mon_flag_rw(0)) {
+			u8 *buf = get_mon_buf();
+			mon_flag_rw(1);
+			command_handler(buf);
+			reset_mon_buf();
+		//}
 	}
 }

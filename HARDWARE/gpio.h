@@ -42,8 +42,14 @@ typedef struct {
 //USART引脚定义
 #define DEBUG_USART_TX_PORT                GPIOA
 #define DEBUG_USART_TX_PIN                 GPIO_Pin_10
-#define DEBUG_USART_TX_PORT                GPIOA
+#define DEBUG_USART_RX_PORT                GPIOA
 #define DEBUG_USART_RX_PIN                 GPIO_Pin_9
+
+//D2引脚定义
+#define UART_DEVICE2_TX_PORT                GPIOC
+#define UART_DEVICE2_TX_PIN                 GPIO_Pin_10
+#define UART_DEVICE2_RX_PORT                GPIOC
+#define UART_DEVICE2_RX_PIN                 GPIO_Pin_11
 
 //按键引脚定义
 #define KEY_0_PORT	GPIOE

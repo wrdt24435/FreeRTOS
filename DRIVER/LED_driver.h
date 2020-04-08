@@ -20,6 +20,7 @@ typedef struct {
 
 
 void LED_Init(void);
+void LED_switch(u32 LED_num, u32 state);
 
 #endif
 

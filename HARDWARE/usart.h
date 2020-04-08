@@ -8,20 +8,25 @@
 #if DEBUG
 	#define MONITOR
 #endif
+typedef enum {
+	DEBUG_USART = 1,
+	UART_DEVICE2_USART = 4,
+}UART_DEVICE;
 
 
-//Òý½Å¶¨Òå
 /*******************************************************/
-#define COMMAND_FLAG		0x80         
-#define DEBUG_USART_RX_AF                       GPIO_AF_USART1
-#define DEBUG_USART_TX_AF                       GPIO_AF_USART1
-
-#define DEBUG_USART_IRQ                 		    USART1_IRQn
+#define DEBUG_USART_BAUDRATE                115200
+#define DEBUG_USART_RX_AF                   GPIO_AF_USART1
+#define DEBUG_USART_TX_AF                   GPIO_AF_USART1
 /************************************************************/
+
+#ifdef Uart_device2
+#define UART_DEVICE2_USART_BAUDRATE                115200
+#endif
 
 typedef struct __debug_struct {
 	//u8	flag;
-	u8 	receive_buf[31];	//0x1F
+	u8 	receive_buf[31];	/*0x1F*/
 	//u16 receive_len;
 	u16 receive_count;
 }debug_struct;

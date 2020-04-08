@@ -6,7 +6,7 @@
 #include "task.h"
 
 
-/*....
+/*	简单服务可以跳过service，直接操作IO
 */
 void LED_switch_service(LED_X LED, u32 state)
 {

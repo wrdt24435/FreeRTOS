@@ -3,8 +3,4 @@
 
 #include "service.h"
 
-void LED_0_Task(void* parameter);
-void LED_1_Task(void* parameter);
-
-
 #endif
