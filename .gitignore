@@ -1,6 +1,4 @@
-﻿OBJ/            # 忽略所有的 OBJ/ 目录下文件
-USER/!*.c
-USER/!*.h	# !开头表示不过滤
-*.o
-*.d
-*.crf
+﻿OBJ/            
+!USER/*.c
+!USER/.*h	
+!USER/Template.uvprojx
