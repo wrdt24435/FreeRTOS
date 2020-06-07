@@ -1,6 +1,8 @@
 #ifndef __KEYBOARD_DRIVER_H
 #define __KEYBOARD_DRIVER_H
 
+//测试git，看到删掉
+
 typedef enum {
 	KEYBOARD_EVENT1,
 	KEYBOARD_EVENT2,

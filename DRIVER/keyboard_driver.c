@@ -10,6 +10,8 @@
 #include "task.h"
 #include "queue.h"
 
+//≤‚ ‘git£¨ø¥µΩ…æµÙ
+
 #if DEBUG
 #define KEY_PRINTF PRINTF
 #else

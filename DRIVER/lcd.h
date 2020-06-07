@@ -2,6 +2,8 @@
 #define __LCD_H		 
 #include "gpio.h" 
 
+//≤‚ ‘git£¨ø¥µΩ…æµÙ
+
 typedef struct  
 {										    
 	u16 width;			//LCD øÌ∂»

@@ -3,7 +3,9 @@
 #include "lcd.h"
 #include "stdlib.h"
 #include "font.h" 
-	   
+
+//测试git，看到删掉
+   
 u16 POINT_COLOR=0x0000;	//画笔颜色
 u16 BACK_COLOR=0xFFFF;  //背景色 
   
