@@ -1,5 +1,6 @@
 #ifndef __USART_H
 #define __USART_H
+#include "common.h"
 
 #ifdef red_printf
 #define printf

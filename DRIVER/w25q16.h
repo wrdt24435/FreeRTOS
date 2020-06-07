@@ -42,7 +42,7 @@ void W25QXX_Write_Enable(void);  		//写使能
 void W25QXX_Write_Disable(void);		//写保护
 void W25QXX_Write_NoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
 void Flash_read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);   //读取flash
-void W25QXX_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);//写入flash
+void Flash_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);//写入flash
 void W25QXX_Erase_Chip(void);    	  	//整片擦除
 void W25QXX_Erase_Sector(u32 Dst_Addr);	//扇区擦除
 void W25QXX_Wait_Busy(void);           	//等待空闲

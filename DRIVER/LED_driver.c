@@ -18,7 +18,7 @@ void LED_switch(u32 LED_num, u32 state)
 			break;
 	}			   //ÑÓÊ±300ms
 }
-
+/*
 int led_service(SERVICE_PACKET *sp)
 {
 	LED_SERVICE_PACKET *led_sp = (LED_SERVICE_PACKET *)sp->buf;
@@ -31,7 +31,7 @@ int led_service(SERVICE_PACKET *sp)
 			break;
 	}
 	return 0;
-}
+}*/
 
 void LED_Init(void)
 {    	

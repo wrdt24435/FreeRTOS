@@ -1,15 +1,18 @@
-#include "common.h"
 #include "usart.h"
 #include "string.h"
 #include "gpio.h"
+#include "FreeRTOS.h" 
+#include "semphr.h"
+#include "task.h"
 
-static void D2_NVIC_Configuration(void);
+//static void D2_NVIC_Configuration(void);
 static void NVIC_Configuration(void);
 
 
 /********************UART 驱动**************************/
 static debug_struct debug;
 static MONITOR_STRUCT monitor;
+static void NVIC_Configuration(void);
 
 const USART_TypeDef *uart_port[] = {
 	0,
@@ -17,7 +20,7 @@ const USART_TypeDef *uart_port[] = {
 	USART2,
 	USART3,
 	UART4,
-}
+};
 
 //mode : tx rx 中断接收
 void Usart_open( u32 port, u32 baudrate, int mode)
@@ -74,7 +77,7 @@ void Usart_SendString( u32 port, char *str)
 /*****************  发送BUF **********************/
 void Usart_Send_buf( u32 port, char *buf, u16 len)
 {
-	unsigned int k=0;
+//	unsigned int k=0;
 	while(len--) 
 	{
 		Usart_SendByte(port, *(buf));
@@ -85,52 +88,9 @@ void Usart_Send_buf( u32 port, char *buf, u16 len)
 
 /********************UART 驱动end**************************/
 
-void USART1_IRQHandler(void)
-{
-#ifdef MONITOR
-	u8 ret;
-	if (USART_GetITStatus(DEBUG_USART, USART_IT_RXNE) != RESET) { //接收中断(接收到的数据必须是0x0d 0x0a结尾)
-		ret = USART_ReceiveData(DEBUG_USART);	//(DEBUG_USART->DR);  //读取接收到的数据
-		if (!monitor.use_flag) {	//处理完一条命令才接下一条
-			debug.receive_buf[debug.receive_count++] = ret;	//++后是长度，也是下一次的下标
-			Usart_SendByte(DEBUG_USART, ret);	//打印出接收了什么
-			if (0x0D == ret) {
-				Usart_SendString(DEBUG_USART, "\r\n");	
-				debug.receive_buf[debug.receive_count - 1] = '\0';	//把回车换成\0
-				//debug.receive_buf[debug.receive_count++] = '\n';
-				monitor.use_flag = 1;
-				/*else {	//monitor前面事件还没执行。
-					Usart_SendString(DEBUG_USART, "UR ERR\r\n");	
-				}*/
-				//reset_data();
-			}
-			else {
-				debug.receive_count &= 0x1F;
-			}
-		}
-		else {
-			Usart_SendString(DEBUG_USART, "MON busy\r\n");		
-		}
-	}
-#endif
-}
-
-u8 *get_uart1_buf(void)
-{
-	return debug.receive_buf;
-}
-
-void UART4_IRQHandler(void)
-{
-	u8 ret;
-	if (USART_GetITStatus(UART4, USART_IT_RXNE) != RESET) { //接收中断(接收到的数据必须是0x0d 0x0a结尾)
-		ret = USART_ReceiveData(UART4);	//(DEBUG_USART->DR);  //读取接收到的数据
-		Usart_SendByte(UART_DEVICE2_USART, ret);	//打印出接收了什么
-	}
-}
-
 /************************UART 设备相关***************************/
 #if DEBUG
+
 
 /**
   * @brief  配置嵌套向量中断控制器NVIC
@@ -215,6 +175,8 @@ void _ttywrch(int ch)
 
 
 #ifdef MONITOR
+extern SemaphoreHandle_t BinarySem_Handle;
+
 //读写
 u32 mon_flag_rw(u32 flag)
 {
@@ -274,4 +236,54 @@ static void D2_NVIC_Configuration(void)
 	NVIC_Init(&NVIC_InitStructure);
 }
 #endif
+void USART1_IRQHandler(void)
+{
+#ifdef MONITOR
+	u8 ret;
+	if (USART_GetITStatus((USART_TypeDef *)uart_port[DEBUG_USART], USART_IT_RXNE) != RESET) { //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+		ret = USART_ReceiveData((USART_TypeDef *)uart_port[DEBUG_USART]);	//(DEBUG_USART->DR);  //读取接收到的数据
+		if (!monitor.use_flag) {	//处理完一条命令才接下一条
+			debug.receive_buf[debug.receive_count++] = ret;	//++后是长度，也是下一次的下标
+			Usart_SendByte(DEBUG_USART, ret);	//打印出接收了什么
+			if (0x0D == ret) {
+				Usart_SendString(DEBUG_USART, "\r\n");	
+				debug.receive_buf[debug.receive_count - 1] = '\0';	//把回车换成\0
+				monitor.use_flag = 1;
+				 BaseType_t pxHigherPriorityTaskWoken; 
+			     u32 ulReturn; 
+			     /* 进入临界段，临界段可以嵌套 */ 
+			     ulReturn = taskENTER_CRITICAL_FROM_ISR(); 
+			  
+		         //释放二值信号量，发送接收到新数据标志，供前台程序查询 
+		         xSemaphoreGiveFromISR(BinarySem_Handle,&pxHigherPriorityTaskWoken); 
+			         
+			     //portYIELD_FROM_ISR(pxHigherPriorityTaskWoken); //如果需要的话进行一次任务切换，系统会判断是否需要进行切换 
+			     /* 退出临界段 */ 
+			     taskEXIT_CRITICAL_FROM_ISR( ulReturn ); 
+
+			}
+			else {
+				debug.receive_count &= 0x1F;
+			}
+		}
+		else {
+			Usart_SendString(DEBUG_USART, "MON busy\r\n");		
+		}
+	}
+#endif
+}
+
+u8 *get_uart1_buf(void)
+{
+	return debug.receive_buf;
+}
+
+void UART4_IRQHandler(void)
+{
+	u8 ret;
+	if (USART_GetITStatus(UART4, USART_IT_RXNE) != RESET) { //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+		ret = USART_ReceiveData(UART4);	//(DEBUG_USART->DR);  //读取接收到的数据
+		Usart_SendByte(UART_DEVICE2_USART, ret);	//打印出接收了什么
+	}
+}
 

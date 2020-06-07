@@ -1,45 +1,62 @@
 #include "common.h" 
-#include "LED_package.h" 
 #include "keyboard_driver.h"
+#include "LED_service_if.h" 
 
 #include "FreeRTOS.h" 
 #include "task.h"
 
+extern void main_thread(void *arg);
+extern void Mon_task(void* arg);
+extern void LED_0_Task(void *arg);
+
 static TaskHandle_t LED0_Task_Handle = NULL;
-static TaskHandle_t LED1_Task_Handle = NULL;
+//static TaskHandle_t LED1_Task_Handle = NULL;
 static TaskHandle_t key_0_Task_Handle = NULL;
 static TaskHandle_t key_1_Task_Handle = NULL;
+static TaskHandle_t main_Task_Handle = NULL;
+static TaskHandle_t mon_Task_Handle = NULL;
 
-
-
-
-void LED_test_task()
+void task_create()
 {
 	BaseType_t ret;
+	ret = xTaskCreate(main_thread, "main", 128, NULL, 0, &main_Task_Handle);
+	if (pdPASS != ret) {
+		ERR;
+	}
+	
+	ret = xTaskCreate(key0_task, "key_0", 128, NULL, 6, &key_0_Task_Handle);
+	if (pdPASS != ret) {
+		ERR;
+	}
+	
+	ret = xTaskCreate(key1_task, "key_1", 128, NULL, 5, &key_1_Task_Handle);
+	if (pdPASS != ret) {
+		ERR;
+	}
+	
 	ret = xTaskCreate(LED_0_Task, "led0", 128, NULL, 2, &LED0_Task_Handle);
 	if (pdPASS != ret) {
 		ERR;
-		return; 
 	}
-	ret = xTaskCreate(LED_1_Task, "led1", 128, NULL, 2, &LED1_Task_Handle);
+
+	ret = xTaskCreate(Mon_task, "mon", 128, NULL, 2, &mon_Task_Handle);
 	if (pdPASS != ret) {
 		ERR;
-		return; 
 	}
 }
 
-void keyboard_task()
+
+void LED_0_Task(void *arg)
 {
-	BaseType_t ret;
-	ret = xTaskCreate(key0_task, "key_0", 128, NULL, 7, &key_0_Task_Handle);
-	if (pdPASS != ret) {
-		ERR;
-		return; 
-	}
-	ret = xTaskCreate(key1_task, "key_1", 128, NULL, 7, &key_1_Task_Handle);
-	if (pdPASS != ret) {
-		ERR;
-		return; 
+	while (1) {
+		LED_switch_service(LED_0, 0);
+		vTaskDelay(500);
+		LED_switch_service(LED_0, 1);
+		vTaskDelay(500);
 	}
 }
+
+
+
+
 

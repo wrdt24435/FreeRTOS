@@ -98,7 +98,8 @@ void LCD_ShowxNum(u16 x,u16 y,u32 num,u8 len,u8 size,u8 mode);				//显示 数字
 void LCD_ShowString(u16 x,u16 y,u16 width,u16 height,u8 size,u8 *p);		//显示一个字符串,12/16字体
 void LCD_Init(void);
 void LCD_SSD_BackLightSet(u8 pwm);							//SSD1963 背光控制
-				   						   																			 
+void LCD_LED(int x);
+
 //LCD分辨率设置
 #define SSD_HOR_RESOLUTION		800		//LCD水平分辨率
 #define SSD_VER_RESOLUTION		480		//LCD垂直分辨率

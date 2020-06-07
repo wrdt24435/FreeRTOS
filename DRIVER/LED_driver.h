@@ -1,8 +1,6 @@
 #ifndef __LED_DRIVER_H
 #define __LED_DRIVER_H
 
-#include "service.h"
-
 typedef enum {
 	LED_0,
 	LED_1,

@@ -6,7 +6,7 @@ typedef enum {
 	//RTC_SERVICE,
 	//FLASH_SERVICE,
 
-	TYPE_MAX
+	TYPE_MAX = 1,
 }SERVICE_TYUPE;
 
 typedef struct {

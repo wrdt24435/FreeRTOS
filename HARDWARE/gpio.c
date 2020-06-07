@@ -124,7 +124,7 @@ void gpio_out(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, u32 out)
 		GPIO_SetBits(GPIOx, GPIO_Pin);
 	}
 	else {
-		GPIO_ResetBits(GPIOx, GPIO_Pin);
+ 		GPIO_ResetBits(GPIOx, GPIO_Pin);
 	}
 }
 

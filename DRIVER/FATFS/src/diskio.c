@@ -10,6 +10,7 @@
 #include "diskio.h"		/* FatFs lower layer API */
 #include "sdio_sdcard.h"
 #include "heap.h"		
+#include "w25q16.h"	
 
 #define SD_CARD	 0  //SD卡,卷标为0
 #define EX_FLASH 1	//外部flash,卷标为1
@@ -76,7 +77,7 @@ DRESULT disk_read (
 		case EX_FLASH://外部flash
 			for(;count>0;count--)
 			{
-				W25QXX_Read(buff,sector*FLASH_SECTOR_SIZE,FLASH_SECTOR_SIZE);
+				Flash_read(buff,sector*FLASH_SECTOR_SIZE,FLASH_SECTOR_SIZE);
 				sector++;
 				buff+=FLASH_SECTOR_SIZE;
 			}
@@ -208,7 +209,7 @@ DWORD get_fattime (void)
 //动态分配内存
 void *ff_memalloc (UINT size)			
 {
-	void *p = my_malloc(size);
+	void *p = My_malloc(size);
 	//PRINTF("fs: %d, a: %x\r\n", size, p);
 	return p;
 }
@@ -216,7 +217,7 @@ void *ff_memalloc (UINT size)
 void ff_memfree (void* mf)		 
 {
 	//PRINTF("free: %x\r\n", mf);
-	my_free(mf);
+	My_free(mf);
 }
 
 

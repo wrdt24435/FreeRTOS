@@ -1,25 +1,22 @@
 #include "common.h" 
-#include "rtc_service.h" 
+#include "rtc.h" 
 #include "rtc_service_if.h" 
 
 
 /*....
 */
-void rtc_time_service(RTC_COMMAND command)
+void rtc_time_service(TIMETYPEDEF *time, RTC_COMMAND command)
 {
-	TIMETYPEDEF led_sp;
-	switch(command)
-	{
+	switch (command) {
 		case GET_RTC_TIME:
-			get_time(&led_sp);
+			get_time(time);
 			break;
-		case SET_RTC_TIME:
-			set_time(&led_sp);
+		case SET_RTC_TIME :
+			set_time(time);
 			break;
 		default :
 			break;
-	}
-	return 0;
+	}		
 }
 
 

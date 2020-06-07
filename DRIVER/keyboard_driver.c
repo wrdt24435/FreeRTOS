@@ -6,7 +6,9 @@
 #include "clk_timer.h"
 #include "gpio.h"
 #include "FreeRTOS.h" 
+#include "semphr.h"
 #include "task.h"
+#include "queue.h"
 
 #if DEBUG
 #define KEY_PRINTF PRINTF
@@ -25,6 +27,8 @@ u8 key_0_status = 0;	//辨别按键1按下(bit1)、按住(bit2)
 u8 key_0_count = 0;		//记录按下住约1s后进入按住状态
 u8 key_0_press = FIRST_TIME;		//25是第一次进入按住状态，进入后每隔200ms发送按住状态
 
+SemaphoreHandle_t MuxSem_Handle =NULL; 
+int global = 0;
 
 void key_init(void)	
 {
@@ -49,9 +53,14 @@ void key1_task(void *arg)
 		if (io_read(KEY_1)) {
 			if (key_1_status) {
 				KEY_PRINTF("KEY1 UP\r\n");
+				xSemaphoreTake(MuxSem_Handle,portMAX_DELAY);
+				KEY_PRINTF("KEY1 lock\r\n");
 				key_1_status = 0;
 				key_1_count = 0;
 				key_1_press = FIRST_TIME;
+				vTaskDelay(5000);
+				xSemaphoreGive( MuxSem_Handle );
+				printf("key1 release\r\n");
 			}
 		}
 		else {//if (key_status & 0x01) {
@@ -71,15 +80,27 @@ void key1_task(void *arg)
 	}
 }
 
+char *msg = "key0 msg\r\n";
+extern QueueHandle_t Test_Queue;
 void key0_task(void *arg)
 {
+	MuxSem_Handle = xSemaphoreCreateMutex(); 
+    if (NULL != MuxSem_Handle) 
+         printf("MuxSem_Handle 互斥量创建成功!\r\n"); 
+	printf("msg addr: %x",msg);
 	while (1) {
 		if (io_read(KEY_0)) {
 			if (key_0_status) {
 				KEY_PRINTF("KEY0 UP\r\n");
+				xQueueSend(Test_Queue, msg, 0);
+				xSemaphoreTake(MuxSem_Handle,portMAX_DELAY);
+				KEY_PRINTF("KEY0 lock\r\n");
 				key_0_status = 0;
 				key_0_count = 0;
-				key_0_press = 25;
+				key_0_press = FIRST_TIME;
+				vTaskDelay(5000);
+				xSemaphoreGive( MuxSem_Handle );
+				printf("key0 release\r\n");
 			}
 		}
 		else {

@@ -19,6 +19,7 @@ typedef enum {
 	POPOUT_INDEX,	//´Î¼¶View
 }VIEW_INDEX;
 
+
 typedef struct {
 	int x;
 	int y;
@@ -31,6 +32,8 @@ typedef int (*PROCESS)(MESSAGE msg, u32 arg1, u32 arg2);
 typedef int (*CALL_BACK)(u32 arg1, u32 arg2);
 typedef void (*CREATE_VIEW)(u32 arg1);
 
+
+void View_init(void);
 int View_switch(VIEW_INDEX index, u32 arg1);
 int Send_message(MESSAGE msg, u32 arg1, u32 arg2);
 void View_create(PROCESS proc, u32 mode);

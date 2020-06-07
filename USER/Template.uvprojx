@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32F407VETx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.14.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32F4xx_DFP.2.13.0</PackID>
+          <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20000000,0x00020000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00080000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -543,9 +543,9 @@
               <FilePath>..\HARDWARE\cti2c.c</FilePath>
             </File>
             <File>
-              <FileName>heap.c</FileName>
+              <FileName>heap_plus.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HARDWARE\heap.c</FilePath>
+              <FilePath>..\HARDWARE\heap_plus.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -561,11 +561,6 @@
               <FileName>mon.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\DRIVER\mon.c</FilePath>
-            </File>
-            <File>
-              <FileName>rng_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DRIVER\rng_driver.c</FilePath>
             </File>
             <File>
               <FileName>sys_driver.c</FileName>
@@ -602,6 +597,16 @@
               <FileType>1</FileType>
               <FilePath>..\DRIVER\lcd.c</FilePath>
             </File>
+            <File>
+              <FileName>LED_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DRIVER\LED_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart_device2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DRIVER\uart_device2.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -613,34 +618,19 @@
               <FilePath>..\SERVICE\service.c</FilePath>
             </File>
             <File>
-              <FileName>flash_service.c</FileName>
+              <FileName>flash_service_if.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\DRIVER\flash_service.c</FilePath>
+              <FilePath>..\SERVICE\flash_service_if.c</FilePath>
             </File>
             <File>
-              <FileName>rtc_service.c</FileName>
+              <FileName>LED_service_if.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\DRIVER\rtc_service.c</FilePath>
+              <FilePath>..\SERVICE\LED_service_if.c</FilePath>
             </File>
             <File>
-              <FileName>LED_package.c</FileName>
+              <FileName>rtc_service_if.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SERVICE\LED_package.c</FilePath>
-            </File>
-            <File>
-              <FileName>flash_package.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SERVICE\flash_package.c</FilePath>
-            </File>
-            <File>
-              <FileName>rtc_package.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SERVICE\rtc_package.c</FilePath>
-            </File>
-            <File>
-              <FileName>LED_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DRIVER\LED_service.c</FilePath>
+              <FilePath>..\SERVICE\rtc_service_if.c</FilePath>
             </File>
           </Files>
         </Group>

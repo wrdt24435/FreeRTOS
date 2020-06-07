@@ -1,20 +1,31 @@
 #include "mon.h"
 #include <string.h>
 #include "usart.h"
+#include "FreeRTOS.h" 
+#include "semphr.h"
+#include "lcd.h"
+#include "timers.h"
 
 u8 mon_flag;
+SemaphoreHandle_t BinarySem_Handle = NULL;
 
-int timer_test(int argc, char **argv);
 int Mon_hello(int argc, char **argv);
-int Heap_state(int argc, char **argv);
+//int Heap_state(int argc, char **argv);
 int send_touch(int argc, char **argv);
+int background(int argc, char **argv);
+int soft_timer(int argc, char **argv);
+
+
 mon_list command_list[] = {
 	{Mon_hello, "hello"},
-	{Heap_state, "memory"},
+	{background, "bk"},
+	{soft_timer, "timer1"},
+	//{Heap_state, "memory"},
 	{send_touch, "touch"},
 	{NULL,NULL}
 };
 	
+
 
 //转换0~9之间的字符串
 int to_int(const char *str)
@@ -35,10 +46,55 @@ int to_int(const char *str)
 
 int Mon_hello(int argc, char **argv)
 {
-	PRINTF("hello monitor\r\n");
+	PRINTF("hello monitor!\r\n");
 	if (argc) {
 		while (argc--) {
 			PRINTF("参数%d: %s\r\n",argc, argv[argc]);
+		}
+	}
+	return 0;
+}
+
+TimerHandle_t Swtmr1_Handle = NULL;
+void test_timer1(void *arg)
+{
+	static u32 count = 0;
+	printf("time1 in %d\r\n", count);
+	if (5 <= count++) {
+		count = 0;
+		xTimerStop(Swtmr1_Handle,0);
+	}
+}
+int soft_timer(int argc, char **argv)
+{
+	Swtmr1_Handle=xTimerCreate((const char*)"AutoReloadTimer", 
+							(TickType_t)2000,/*定时器周期 1000(tick) */ 
+							(UBaseType_t)pdTRUE,/* 周期模式 */ 
+							(void*)1,/*为每个计时器分配一个索引的唯一 ID */ 
+							(TimerCallbackFunction_t)test_timer1); 
+	if (Swtmr1_Handle != NULL) { 
+	/*************************************************************** 
+	* xTicksToWait:如果在调用 xTimerStart()时队列已满，则以 tick 为单位指定调用任务应保持 
+	* 在 Blocked(阻塞)状态以等待 start 命令成功发送到 timer 命令队列的时间。 
+	* 如果在启动调度程序之前调用 xTimerStart()，则忽略 xTicksToWait。在这里设置等待时间为 0 
+	***********************************************************/ 
+
+		xTimerStart(Swtmr1_Handle, 0);  //开启周期定时器 
+	}
+	return 0;
+}
+
+int background(int argc, char **argv)
+{
+	if (argc) {
+		if (!strncmp("on", argv[0], 2)) {	
+			LCD_LED(BG_ON);
+		}
+		else if (!strncmp("off", argv[0], 3)) {
+			LCD_LED(BG_OFF);
+		}
+		else {
+			PRINTF("參數 err\r\n");
 		}
 	}
 	return 0;
@@ -146,14 +202,20 @@ void command_handler(u8 *buf)
 	}
 }
 
-void Mon_task(void)
+void Mon_task(void* arg)
 {
+	BinarySem_Handle = xSemaphoreCreateBinary();	 
+	if(NULL != BinarySem_Handle)
+		printf("BinarySem_Handle二值信号量创建成功!\r\n");
+	BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
 	while (1) {
-		//if (mon_flag_rw(0)) {
+	    //获取二值信号量 xSemaphore,没获取到则一直等待
+	 	xReturn = xSemaphoreTake(BinarySem_Handle, portMAX_DELAY);
+	    if(pdTRUE == xReturn) {
 			u8 *buf = get_mon_buf();
 			mon_flag_rw(1);
 			command_handler(buf);
 			reset_mon_buf();
-		//}
+	    }
 	}
 }

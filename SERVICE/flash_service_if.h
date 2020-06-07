@@ -3,4 +3,9 @@
 
 #include "service.h"
 
+typedef enum {
+	PERIPHERAL_FLASH_READ,
+	PERIPHERAL_FLASH_WRITE,
+}FLASH_COMMAND;
+
 #endif

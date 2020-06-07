@@ -116,15 +116,21 @@ u32 RNG_Get_RandomNum(void)
 	return RNG_GetRandomNumber();	
 }
 
+//生成[min,max]范围的随机数
+int RNG_Get_RandomRange(int min,int max)
+{ 
+   return RNG_Get_RandomNum()%(max-min+1) +min;
+}
+
 void rng_test()
 {
 	u32 arr[6];
 	arr[0] = RNG_Get_RandomNum();
 	arr[1] = RNG_Get_RandomNum();
-	arr[2] = get_random_number()%((u32)(10-0+1)) +0;
-	arr[3] = get_random_number()%((u32)(10-0+1)) +0;
-	arr[4] = get_random_number()%((u32)(77-7+1)) +7;
-	arr[5] = get_random_number()%((u32)(77-7+1)) +7;
+	arr[2] = RNG_Get_RandomRange(10, 0);
+	arr[3] = RNG_Get_RandomRange(10, 0);
+	arr[4] = RNG_Get_RandomRange(77, 7);
+	arr[5] = RNG_Get_RandomRange(77, 7);
 	SYS_PRINTF("%u, %u\r\n0-10:%u, %u\r\n7-77:%u, %u\r\n",arr[0] ,arr[1], arr[2], arr[3], arr[4], arr[5]);
 }
 /***************************RNG**********************************/

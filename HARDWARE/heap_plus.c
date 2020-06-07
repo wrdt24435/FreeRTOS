@@ -1,27 +1,16 @@
+#include "common.h"
 #include <stdio.h>
 #include "string.h"
 
-#define PRINTF printf
-#define ERR		PRINTF("ERR %d\r\n", __LINE__);
-#define ARR_NUM(x) (sizeof(x)/sizeof(x[0]))
 
-#define size_t	unsigned int
+#define size_t	u32
 
 #define HEAP_SIZE 512
 #define heapMINIMUM_BLOCK_SIZE	( ( size_t ) ( xHeapStructSize << 1 ) )
 #define portBYTE_ALIGNMENT			4
 #define portBYTE_ALIGNMENT_MASK	( portBYTE_ALIGNMENT - 1 )
 #define xHeapStructSize		sizeof( BlockLink_t )
-#define xBlockAllocatedBit  (1 << 31)	//已使用的内存块最高位置1
-
-#include <time.h>
-void delay(int seconds)
-{
-	clock_t start = clock();
-	clock_t lay = (clock_t)seconds * CLOCKS_PER_SEC;
-	while ((clock()-start) < lay);
-}
-
+#define xBlockAllocatedBit  (1u << 31)	//已使用的内存块最高位置1
 
 typedef struct A_BLOCK_LINK
 {
@@ -133,7 +122,7 @@ void My_free( void *pv )
 	}
 }
 
-static void My_heap_init( void )
+void My_heap_init( void )
 {
 	BlockLink_t *pxFirstFreeBlock;
 	unsigned char *pucAlignedHeap;

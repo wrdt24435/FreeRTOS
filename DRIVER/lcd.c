@@ -3,9 +3,6 @@
 #include "lcd.h"
 #include "stdlib.h"
 #include "font.h" 
-
-#define	LCD_LED(x)	io_set_out(LCD_BK, x)
-
 	   
 u16 POINT_COLOR=0x0000;	//»­±ÊÑÕÉ«
 u16 BACK_COLOR=0xFFFF;  //±³¾°É« 
@@ -14,6 +11,11 @@ u16 BACK_COLOR=0xFFFF;  //±³¾°É«
 //Ä¬ÈÏÎªÊúÆÁ
 _lcd_dev lcddev;
 
+
+void LCD_LED(int x)	
+{
+	io_set_out(LCD_BK, x);
+}
 	 
 //Ð´¼Ä´æÆ÷º¯Êý
 //regval:¼Ä´æÆ÷Öµ
