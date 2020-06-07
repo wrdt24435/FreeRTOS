@@ -68,5 +68,4 @@ void main_thread(void *arg)
 
 }
 
-//dev合并到master的东西
 
