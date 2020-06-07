@@ -1,5 +1,5 @@
 ﻿OBJ/  
-USER/          
+USER/*          
 !USER/*.c
-!USER/.*h	
+!USER/*.h	
 !USER/Template.uvprojx
